@@ -9,6 +9,7 @@ const reviewSchema = new Schema({
     default: 0,
   },
   comment: String,
+  commentReplies: [Object],
 });
 
 // Link Schema

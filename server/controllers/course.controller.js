@@ -193,6 +193,46 @@ const courseExists = userCourseList.find(
    }
 });
 
+
+const replyToReview = CatchAsyncError(async(req, res, next) =>{
+   
+   try{
+     const {comment, courseId, reviewId} = req.body;
+     const course = await CourseModel.findById(courseId);
+
+     if (!course) {
+       return next(new ErrorHandler("Course not found", 404));
+     }
+
+     const review = course?.reviews?.find((rev) => rev._id.toString() === reviewId.toString());
+
+     if (!review) {
+       return next(new ErrorHandler("Review not found", 404));
+     }
+
+     const replyData = {
+       user: req.user,
+       comments : comment
+     };
+
+     if(!review.commentReplies){
+        review.commentReplies = [];
+     }
+     
+     review.commentReplies.push(replyData);
+
+     await course.save();
+
+     res.status(201).json({
+       success: true,
+       course,
+     });
+
+   }catch(error){
+    return next(new ErrorHandler(error.message, 500));
+   }
+});
+
 module.exports = {
     uploadCourse,
     editCourse,
@@ -200,4 +240,5 @@ module.exports = {
     getAllCourse,
     getCourseByUser,
     addReview,
+    replyToReview,
 };
