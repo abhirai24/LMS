@@ -103,9 +103,101 @@ const getAllCourse = CatchAsyncError(async(req, res, next) =>{
 });
 
 
+//get course content
+
+const getCourseByUser = CatchAsyncError(async(req, res, next) =>{ 
+   try{
+   
+    const userCourseList  = req.user?.courses;
+    const user = await User.findById(req.user.id).populate("courses");
+
+    
+    const courseId = req.params.id;
+    console.log("courseId", userCourseList);
+    const courseExists = userCourseList?.find(
+  (course) => course._id.toString() === courseId
+);
+
+
+    if(!courseExists){
+      return next(
+        new ErrorHandler("Your are not eligible to access this course", 404)
+      );
+    }
+
+    const course = await CourseModel.findById(courseId);
+    const content = course?.courseData;
+
+    res.status(200).json({
+      success: true,
+      content,
+    });
+
+   }catch(error){
+    return next(new ErrorHandler(error.message, 500));
+   }
+});
+
+
+//  add review and rating 
+
+const addReview = CatchAsyncError(async(req, res, next) =>{
+   try{
+    const { rating, comment } = req.body;
+    const courseId = req.params.id;
+    const userCourseList = Array.isArray(req.user?.courses)
+  ? req.user.courses
+  : Object.values(req.user?.courses || {});
+
+const courseExists = userCourseList.find(
+  (course) => course._id.toString() === courseId.toString()
+);
+
+    if (!courseExists) {
+      return next(
+        new ErrorHandler("You are not eligible to review this course", 404)
+      );
+    }
+
+    const course = await CourseModel.findById(courseId);
+    
+    const reviewData = {
+      user: req.user,
+      rating: Number(rating),
+      comment
+    };
+
+    course.reviews.push(review);
+    course.numOfReviews = course.reviews.length;
+
+    // Calculate average rating
+    course.ratings = course.reviews.reduce((acc, item) => item.rating + acc, 0) / course.reviews.length;
+
+    await course.save();
+
+    // create notification
+    const notification = {
+      title: "New Review Added",
+      message: `${req.user.name} added a new review for ${course.name}`,
+    };
+
+    // create notification controller
+
+    res.status(201).json({
+      success: true,
+      course,
+    });
+
+   }catch(error){
+    return next(new ErrorHandler(error.message, 500));
+   }
+});
+
 module.exports = {
     uploadCourse,
     editCourse,
     getSingleCourse,
     getAllCourse,
+    getCourseByUser,
+    addReview,
 };

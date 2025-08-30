@@ -20,8 +20,8 @@ const linkSchema = new Schema({
 // Comment Schema
 const commentSchema = new Schema({
   user: Object,
-  comment: String,
-  commentReplies: [Object],
+  question: String,
+  questionReplies: [Object],
 });
 
 // Course Data Schema

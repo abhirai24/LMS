@@ -1,5 +1,5 @@
 const express = require('express');
-const {uploadCourse, editCourse, getSingleCourse, getAllCourse} = require('../controllers/course.controller');
+const {uploadCourse, editCourse, getSingleCourse, getAllCourse, getCourseByUser, addReview} = require('../controllers/course.controller');
 const { isAuthenticated, authorizedRoles } = require('../middleware/auth');
 const courseRouter = express.Router();
 
@@ -19,12 +19,39 @@ courseRouter.put(
 
 courseRouter.get(
     "/getSingleCourse/:id",
+     // isAuthenticated,
     getSingleCourse
 );
 
 courseRouter.get(
     "/getAllCourse",
     getAllCourse
+);
+
+
+courseRouter.get(
+    "/getCourseContent/:id",
+    isAuthenticated,
+    getCourseByUser
+);
+
+
+// courseRouter.put(
+//     "/addQuestion",
+//     isAuthenticated,
+//     addQuestion
+// );
+
+// courseRouter.put(
+//     "/addAnswer",
+//     isAuthenticated,
+//     addAnswer
+// );
+
+courseRouter.put(
+    "/addReview/:id",
+    isAuthenticated,
+    addReview
 );
 
 module.exports = courseRouter;
