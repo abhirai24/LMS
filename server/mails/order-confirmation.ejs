@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Order Confirmation</title>
+  <style>
+    body {
+      font-family: Arial, Helvetica, sans-serif;
+      background-color: #f8f9fa;
+      margin: 0;
+      padding: 0;
+    }
+    .container {
+      max-width: 600px;
+      background: #ffffff;
+      margin: 30px auto;
+      border-radius: 12px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+      overflow: hidden;
+    }
+    .header {
+      background: #4CAF50;
+      color: white;
+      text-align: center;
+      padding: 20px 10px;
+    }
+    .header h1 {
+      margin: 0;
+      font-size: 26px;
+    }
+    .content {
+      padding: 20px 30px;
+      color: #333;
+    }
+    .content h2 {
+      font-size: 20px;
+      margin-bottom: 10px;
+    }
+    .order-summary {
+      margin: 20px 0;
+      border: 1px solid #ddd;
+      border-radius: 8px;
+      overflow: hidden;
+    }
+    .order-summary table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+    .order-summary th, .order-summary td {
+      padding: 12px 15px;
+      text-align: left;
+    }
+    .order-summary th {
+      background: #f1f1f1;
+      font-weight: 600;
+    }
+    .order-summary td {
+      border-top: 1px solid #eee;
+    }
+    .footer {
+      background: #f1f1f1;
+      text-align: center;
+      padding: 15px;
+      font-size: 14px;
+      color: #555;
+    }
+    .footer a {
+      color: #4CAF50;
+      text-decoration: none;
+      font-weight: bold;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    
+    <!-- Header -->
+    <div class="header">
+      <h1>Order Confirmation</h1>
+      <p>Thank you for your purchase!</p>
+    </div>
+    
+    <!-- Content -->
+    <div class="content">
+      <h2>Order Details</h2>
+      <div class="order-summary">
+        <table>
+          <tr>
+            <th>Order ID</th>
+            <td><%= order._id %></td>
+          </tr>
+          <tr>
+            <th>Course Name</th>
+            <td><%= order.name %></td>
+          </tr>
+          <tr>
+            <th>Price</th>
+            <td>₹<%= order.price %></td>
+          </tr>
+          <tr>
+            <th>Date</th>
+            <td><%= order.date %></td>
+          </tr>
+        </table>
+      </div>
+
+      <p>
+        You can now access your course anytime from your dashboard.  
+        If you have any questions, feel free to reach out to our support team.
+      </p>
+    </div>
+    
+    <!-- Footer -->
+    <div class="footer">
+      <p>Need help? Contact <a href="mailto:support@example.com">support@example.com</a></p>
+      <p>&copy; <%= new Date().getFullYear() %> Your Company. All Rights Reserved.</p>
+    </div>
+
+  </div>
+</body>
+</html>
