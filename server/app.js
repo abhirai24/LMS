@@ -5,6 +5,7 @@ const userRouter = require('./routes/user.router');
 const courseRouter = require('./routes/course.router');
 const orderRouter = require('./routes/order.router');
 const ErrorMiddleware = require('./middleware/error');
+const notificationRouter = require('./routes/notification.router');
 require('dotenv').config();
 
 const app = express();
@@ -32,6 +33,7 @@ app.get("/test", (req, res, next) => {
 app.use("/api/v1", userRouter);
 app.use("/api/v1", courseRouter);
 app.use("/api/v1", orderRouter);
+app.use("/api/v1", notificationRouter);
 
 // Unknown route handler
 // app.all("*", (req, res, next) => {
