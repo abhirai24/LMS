@@ -8,7 +8,7 @@ const path = require("path");
 const sendMail = require("../utils/sendMail");
 const notificationModel = require("../models/notification.model");
 const { newOrder } = require("../services/order.service");
-const  {createOrderService } = require("../services/order.service");
+const  {createOrderService, getAllOrder } = require("../services/order.service");
 
 const createOrder = CatchAsyncError(async (req, res, next) => {
   try {
@@ -95,6 +95,14 @@ await userModel.findByIdAndUpdate(
 
   } catch (error) {
     return next(new ErrorHandler(error.message, 500));
+  }
+});
+
+const getAllOrdersController = CatchAsyncError(async (req, res, next) => {
+  try {
+     getAllOrder  (res);
+  } catch (error) {
+    return next(new ErrorHandler(error.message, 400));
   }
 });
 

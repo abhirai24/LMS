@@ -8,9 +8,8 @@ const ejs = require('ejs');
 const path = require('path');
 const sendMail = require('../utils/sendMail');
 const {sendToken} = require("../utils/jwt");
-const { getUserById } = require('../services/user.services');
+const { getUserById, getAllUsers } = require('../services/user.services');
 const cloudinary = require('cloudinary');
-
 // 🔐 Create activation token and code
 const createActivationToken = (name,email, password) => {
   const activationCode = Math.floor(1000 + Math.random() * 9000).toString();
@@ -381,6 +380,59 @@ const updateProfilePicture = CatchAsyncError(async(req, res, next) =>{
   }
 });
 
+
+const getAllUserController = CatchAsyncError(async (req, res, next) => {
+  try {
+     getAllUsers(res);
+  } catch (error) {
+    return next(new ErrorHandler(error.message, 400));
+  }
+});
+
+
+// update user role
+
+const updateUserRole = CatchAsyncError(async (req, res, next) => {
+  try {
+    const { role, id } = req.body;
+
+    const user = await userModel.findByIdAndUpdate(id, { role }, { new: true });
+    if (!user) {
+      return next(new ErrorHandler("User not found", 404));
+    }
+
+     await user.save();
+    res.status(200).json({
+      success: true,
+      user
+    });
+  } catch (error) {
+    return next(new ErrorHandler(error.message, 400));
+  }
+});
+
+// Delete user
+const deleteUser = CatchAsyncError(async (req, res, next) => {
+  try {
+    const userId = req.params.id;
+
+    const user = await userModel.findById(userId);
+    if (!user) {
+      return next(new ErrorHandler("User not found", 404));
+    }
+    await user.deleteOne({ _id: userId });
+
+    // await redis.del(userId);
+
+    res.status(200).json({
+      success: true,
+      message: "User deleted successfully"
+    });
+  } catch (error) {
+    return next(new ErrorHandler(error.message, 400));
+  }
+});
+
 // ✅ Export both functions
 module.exports = {
   registrationUser,
@@ -394,4 +446,7 @@ module.exports = {
   updateUserInfo,
   updateUserPassword,
   updateProfilePicture,
+  getAllUserController,
+  updateUserRole,
+  deleteUser,
 };

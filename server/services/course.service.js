@@ -9,4 +9,13 @@ const createCourse = CatchAsyncError(async(req, res, next) =>{
   });
 });
 
-module.exports = {createCourse};
+
+const getAllCourses = async(res) =>{
+    const courses = await CourseModel.find();
+    res.status(200).json({
+        success: true,
+        courses,
+    });
+};
+
+module.exports = {createCourse, getAllCourses};

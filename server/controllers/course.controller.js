@@ -1,7 +1,7 @@
 const ErrorHandler = require('../utils/ErrorHandler');
 const CatchAsyncError = require('../middleware/catchAsyncErrors');
 const cloudinary = require('cloudinary');
-const { createCourse } = require('../services/course.service');
+const { createCourse, getAllCourses } = require('../services/course.service');
 const CourseModel = require('../models/course.model');
 const { trusted } = require('mongoose');
 
@@ -231,6 +231,15 @@ const replyToReview = CatchAsyncError(async(req, res, next) =>{
    }catch(error){
     return next(new ErrorHandler(error.message, 500));
    }
+});
+
+// get all courses
+const getAllCoursesController = CatchAsyncError(async (req, res, next) => {
+  try {
+     getAllCourses(res);
+  } catch (error) {
+    return next(new ErrorHandler(error.message, 400));
+  }
 });
 
 module.exports = {

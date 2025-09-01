@@ -9,7 +9,17 @@ const getUserById = async(id, res) =>{
     })
 };
 
+const getAllUsers = async(res) =>{
+
+    const users = await userModel.find();
+    res.status(200).json({
+        success: true,
+        users,
+    });
+};
+
 module.exports = {
     getUserById,
+    getAllUsers,
 }
 
